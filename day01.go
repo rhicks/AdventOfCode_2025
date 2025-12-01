@@ -46,28 +46,51 @@ func day01_2(input string) {
 		if strings.Contains(line, "R") {
 			// fmt.Println("ADD")
 			number, _ = strconv.Atoi(line[1:])
-			for number > 100 {
-				number = number - 100
+			fmt.Printf("R   %3d %5s\n", currentPosition, line)
+			if currentPosition == 0 {
+				zeroHit++
+				fmt.Printf("R   %3d %5s - STOPPED\n", currentPosition, line)
 			}
-			currentPosition, zeroHit = getDelta(currentPosition, number, zeroHit)
+			// spinDial(direction, count)
+			for number > 0 {
+				if currentPosition == 100 {
+					currentPosition = 0
+					zeroHit++
+					fmt.Printf("R   %3d %5s - HIT\n", currentPosition, line)
+				}
+				currentPosition++
+				number--
+			}
+
 		} else if strings.Contains(line, "L") {
 			// .Println("SUBTRACT")
 			number, _ = strconv.Atoi(line[1:])
-			for number > 100 {
-				number = number - 100
+			fmt.Printf("L   %3d %5s\n", currentPosition, line)
+			if currentPosition == 100 {
+				zeroHit++
+				fmt.Printf("L   %3d %5s - STOPPED\n", currentPosition, line)
 			}
-			number = number * -1
-			currentPosition, zeroHit = getDelta(currentPosition, number, zeroHit)
+			for number > 0 {
+				if currentPosition == 0 {
+					currentPosition = 100
+					zeroHit++
+					fmt.Printf("L   %3d %5s - HIT\n", currentPosition, line)
+				}
+				currentPosition--
+				number--
+			}
 		} else {
 			fmt.Println("ERROR")
 		}
 		// fmt.Println(currentPosition)
 	}
-	fmt.Println(zeroHit)
+	fmt.Println("#####################")
+	fmt.Println("Day 01 02:", zeroHit)
 }
 
 func getDelta(current int, new int, hitCounter int) (int, int) {
 	delta := current + new
+	// fmt.Println(delta)
 
 	if delta == 100 || delta == 0 {
 		hitCounter++
