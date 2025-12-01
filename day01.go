@@ -31,7 +31,37 @@ func day01_1(input string) {
 		} else {
 			fmt.Println("ERROR")
 		}
-		fmt.Println(currentPosition)
+		//fmt.Println(currentPosition)
+	}
+	fmt.Println("Day 01 01:", zeroHit)
+}
+
+func day01_2(input string) {
+	currentPosition := 50
+	zeroHit := 0
+	number := 0
+	lines := strings.SplitSeq(strings.TrimSpace(input), "\n")
+
+	for line := range lines {
+		if strings.Contains(line, "R") {
+			// fmt.Println("ADD")
+			number, _ = strconv.Atoi(line[1:])
+			for number > 100 {
+				number = number - 100
+			}
+			currentPosition, zeroHit = getDelta(currentPosition, number, zeroHit)
+		} else if strings.Contains(line, "L") {
+			// .Println("SUBTRACT")
+			number, _ = strconv.Atoi(line[1:])
+			for number > 100 {
+				number = number - 100
+			}
+			number = number * -1
+			currentPosition, zeroHit = getDelta(currentPosition, number, zeroHit)
+		} else {
+			fmt.Println("ERROR")
+		}
+		// fmt.Println(currentPosition)
 	}
 	fmt.Println(zeroHit)
 }

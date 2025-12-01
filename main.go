@@ -23,4 +23,5 @@ func main() {
 	input := getInput(day)
 
 	day01_1(input)
+	//day01_2(input)
 }
