@@ -24,7 +24,6 @@ func main() {
 
 	// day01_1(input)
 	// day01_2(input)
-	// mnml()
 	day02_1(input)
 	day02_2(input)
 

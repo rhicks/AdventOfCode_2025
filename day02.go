@@ -46,7 +46,6 @@ func day02_2(input string) {
 		for startNumber < (endNumber + 1) {
 			startNumberString := strconv.Itoa(startNumber)
 			divisors := divisors(len(startNumberString))
-			//fmt.Println(startNumberString, divisors)
 			for i, value := range divisors {
 				if i != 0 {
 					parts, _ := splitIntoParts(startNumberString, value)
