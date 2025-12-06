@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/charmbracelet/log"
+	"github.com/samyakbardiya/advent-of-code/2025/util"
 )
 
 func day03_1(input string) {
@@ -47,35 +50,43 @@ func day03_1(input string) {
 func day03_2(input string) {
 	fmt.Println("Day 3_2")
 
-	lines := strings.SplitSeq(strings.TrimSpace(input), "\n")
-	for line := range lines {
-		fmt.Println()
-		fmt.Println(line)
-		battery := ""
-		searchWindow := len(line) - 12
-		start := 0
-
-		for len(battery) < 12 {
-			idx, num := getLargestInt(line, searchWindow, start)
-			start = idx
-			battery += strconv.Itoa(num)
-			fmt.Println(idx, start, num, battery)
-		}
+	data := []string{
+		"987654321111111",
+		"811111111111119",
+		"234234234234278",
+		"818181911112111",
 	}
-}
 
-func getLargestInt(s string, windowSize int, startIndex int) (int, int) {
-	// return the largest int in a string, and its index
-	// where it is the first int of that size found
-	idx := 0
-	num := 0
-	largest := 0
-	for i := startIndex; i < windowSize; i++ {
-		num = int(s[i] - '0')
-		if num > largest {
-			largest = num
-			idx = i
+	log.SetLevel(log.InfoLevel)
+
+	totalJoltage := 0
+
+	for _, bank := range data {
+		joltage := ""
+		startIdx := 0
+		needed := 12
+		fmt.Println(bank)
+
+		for i := range needed {
+			maxIdx := startIdx
+			remaining := needed - i - 1
+			maxSearchIdx := len(bank) - remaining
+			fmt.Println(maxIdx, remaining, maxSearchIdx)
+
+			for j := startIdx; j < maxSearchIdx; j++ {
+				fmt.Println(bank[j], bank[maxIdx])
+				if bank[j] > bank[maxIdx] {
+					maxIdx = j
+				}
+			}
+
+			joltage += string(bank[maxIdx])
+			startIdx = maxIdx + 1
 		}
+		log.Debug("", "joltage", joltage)
+
+		totalJoltage += util.Atoi(joltage)
 	}
-	return idx, largest
+
+	fmt.Println(totalJoltage)
 }
