@@ -52,6 +52,8 @@ func day03_2(input string) {
 	for line := range lines {
 		fmt.Println()
 		fmt.Println(line)
+		battery := ""
+		desiredBatteryLength := 12
 
 		batteryMap := map[int]int{}
 		for i, char := range line {
@@ -59,14 +61,19 @@ func day03_2(input string) {
 			batteryMap[i] = num
 		}
 		printMapDesc(batteryMap)
-		var newLine []int
-		fmt.Println(len(newLine))
+		// var newLine []int
+		// fmt.Println(len(newLine))
 		for i := 9; i >= 0; i-- {
-			getSlice(line, 0, len(line))
 			currentSlice := keysByValue(batteryMap, i)
-			if len(currentSlice) > 0 && len(line) > 12 {
+			if len(currentSlice) > 0 {
+				if currentSlice[0] < 88
 			}
 		}
+		// 	getSlice(line, 0, len(line))
+		// 	// currentSlice := keysByValue(batteryMap, i)
+		// 	// if len(currentSlice) > 0 && len(line) > 12 {
+		// 	// }
+		// }
 		// fmt.Println(i, keysByValue(batteryMap, i))
 		// currentSlice := keysByValue(batteryMap, i)
 		// if len(currentSlice) > 0 {
