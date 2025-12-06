@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/charmbracelet/log"
-	"github.com/samyakbardiya/advent-of-code/2025/util"
 )
 
 func day03_1(input string) {
@@ -50,43 +47,75 @@ func day03_1(input string) {
 func day03_2(input string) {
 	fmt.Println("Day 3_2")
 
-	data := []string{
-		"987654321111111",
-		"811111111111119",
-		"234234234234278",
-		"818181911112111",
-	}
+	// 987654321111111 - Org
+	// 987654321111    - Good
+	// 811111111111119
+	// 811111111119
+	// 234234234234278
+	// 434234234278
+	// 818181911112111
+	// 888911112111
 
-	log.SetLevel(log.InfoLevel)
+	maxSizeofLine := 12
 
-	totalJoltage := 0
-
-	for _, bank := range data {
-		joltage := ""
-		startIdx := 0
-		needed := 12
-		fmt.Println(bank)
-
-		for i := range needed {
-			maxIdx := startIdx
-			remaining := needed - i - 1
-			maxSearchIdx := len(bank) - remaining
-			fmt.Println(maxIdx, remaining, maxSearchIdx)
-
-			for j := startIdx; j < maxSearchIdx; j++ {
-				fmt.Println(bank[j], bank[maxIdx])
-				if bank[j] > bank[maxIdx] {
-					maxIdx = j
-				}
+	lines := strings.SplitSeq(strings.TrimSpace(input), "\n")
+	for line := range lines {
+		battery := 0
+		println()
+		println(line)
+		for i := 0; i < len(line); i++ {
+			shortString := getStringOfSize(line, maxSizeofLine+1) // get a 13 char line
+			biggestNumber := getLargestString(shortString)        // find largest 12 digit number
+			println("Comparing:", battery, biggestNumber)
+			if biggestNumber > battery {
+				battery = biggestNumber
 			}
-
-			joltage += string(bank[maxIdx])
-			startIdx = maxIdx + 1
+			// battery = biggestNumber // store largest 12 digit number in library
+			line = shiftRightDropFirst(line)
 		}
-		log.Debug("", "joltage", joltage)
+		println("battery:", battery)
+	}
+}
 
-		totalJoltage += util.Atoi(joltage)
+func getStringOfSize(s string, size int) string {
+	if size > len(s) {
+		return s
+	} else {
+		return s[:size]
+	}
+}
+
+func getLargestString(s string) int {
+	if len(s) != 13 {
+		// handle error however you like; for now, just panic
+		panic("input must be exactly 13 characters long")
+	}
+	maxStr := ""
+	for i := 0; i < len(s); i++ {
+		// remove the character at index i
+		candidate := s[:i] + s[i+1:]
+
+		// first candidate, or larger than current max?
+		if candidate > maxStr {
+			maxStr = candidate
+		}
+	}
+	// convert the largest 12-digit string to an int
+	result, err := strconv.Atoi(maxStr)
+	if err != nil {
+		panic(err) // or handle error
 	}
 
-	fmt.Println(totalJoltage)
+	return result
+}
+
+func removeAtIndex(s string, index int) string {
+	return s[:index] + s[index+1:]
+}
+
+func shiftRightDropFirst(s string) string {
+	if len(s) <= 13 {
+		return s
+	}
+	return s[1:]
 }
