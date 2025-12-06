@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"slices"
 	"strconv"
 	"strings"
 )
@@ -52,68 +51,30 @@ func day03_2(input string) {
 	for line := range lines {
 		fmt.Println()
 		fmt.Println(line)
-		battery := ""
-		desiredBatteryLength := 12
+		battery := []int{}
 
-		batteryMap := map[int]int{}
 		for i, char := range line {
-			num := int(char - '0')
-			batteryMap[i] = num
+			if 
+			battery = append(battery, int(char-'0'))
+			i++
+			searchStack(battery, 1)
 		}
-		printMapDesc(batteryMap)
-		// var newLine []int
-		// fmt.Println(len(newLine))
-		for i := 9; i >= 0; i-- {
-			currentSlice := keysByValue(batteryMap, i)
-			if len(currentSlice) > 0 {
-				if currentSlice[0] < 88
-			}
-		}
-		// 	getSlice(line, 0, len(line))
-		// 	// currentSlice := keysByValue(batteryMap, i)
-		// 	// if len(currentSlice) > 0 && len(line) > 12 {
-		// 	// }
-		// }
-		// fmt.Println(i, keysByValue(batteryMap, i))
-		// currentSlice := keysByValue(batteryMap, i)
-		// if len(currentSlice) > 0 {
-		// 	if currentSlice[0] < 88 { // this is suffcient to remove any first numbers above 88
-		// 		// fmt.Println(i, keysByValue(batteryMap, i))
-		// 		// fmt.Println(currentSlice[0], "Index") // index first number of the BatteryPack
-		// 		// fmt.Println(i, "Starting Value")
-		// 		newLine := line[currentSlice[0]:] // actul first number of the BatteryPack
-		// 		if len(newLine) == 13 {
-		// 			fmt.Println(line)
-		// 			fmt.Println(newLine)
-		// 			break
-		// 		}
-		// 		//break
-		// 	}
-		// }
+		fmt.Print(battery)
 	}
 }
 
-func getSlice(line string, start int, end int) {
-	// start := 0       //defaults
-	// end := len(line) //defaults
-	fmt.Println(line[start:end])
-}
+func searchStack(batt []int, target int) {
+	for i := len(batt) - 1; i >= 0; i-- {
+		v := batt[i]
 
-func keysByValue(m map[int]int, value int) []int {
-	var keys []int
-	for k, v := range m {
-		if value == v {
-			keys = append(keys, k)
+		fmt.Printf("Comparing %d to %d\n", v, target)
+
+		if v == target {
+			fmt.Println("  equal")
+		} else if v < target {
+			fmt.Println("  less than")
+		} else {
+			fmt.Println("  greater than")
 		}
-	}
-	slices.Sort(keys)
-	return keys
-}
-
-func printMapDesc(m map[int]int) {
-	// print a map of ints in descending order
-	// the map will show the index number of the numbers 0-9
-	for i := 9; i >= 0; i-- {
-		fmt.Println(i, keysByValue(m, i))
 	}
 }
