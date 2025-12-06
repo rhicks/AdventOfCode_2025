@@ -51,30 +51,31 @@ func day03_2(input string) {
 	for line := range lines {
 		fmt.Println()
 		fmt.Println(line)
-		battery := []int{}
+		battery := ""
+		searchWindow := len(line) - 12
+		start := 0
 
-		for i, char := range line {
-			if 
-			battery = append(battery, int(char-'0'))
-			i++
-			searchStack(battery, 1)
+		for len(battery) < 12 {
+			idx, num := getLargestInt(line, searchWindow, start)
+			start = idx
+			battery += strconv.Itoa(num)
+			fmt.Println(idx, start, num, battery)
 		}
-		fmt.Print(battery)
 	}
 }
 
-func searchStack(batt []int, target int) {
-	for i := len(batt) - 1; i >= 0; i-- {
-		v := batt[i]
-
-		fmt.Printf("Comparing %d to %d\n", v, target)
-
-		if v == target {
-			fmt.Println("  equal")
-		} else if v < target {
-			fmt.Println("  less than")
-		} else {
-			fmt.Println("  greater than")
+func getLargestInt(s string, windowSize int, startIndex int) (int, int) {
+	// return the largest int in a string, and its index
+	// where it is the first int of that size found
+	idx := 0
+	num := 0
+	largest := 0
+	for i := startIndex; i < windowSize; i++ {
+		num = int(s[i] - '0')
+		if num > largest {
+			largest = num
+			idx = i
 		}
 	}
+	return idx, largest
 }
