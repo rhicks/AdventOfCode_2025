@@ -57,65 +57,38 @@ func day03_2(input string) {
 	// 888911112111
 
 	maxSizeofLine := 12
+	var total int64
 
 	lines := strings.SplitSeq(strings.TrimSpace(input), "\n")
 	for line := range lines {
-		battery := 0
-		println()
+		println("###########################")
 		println(line)
+		toRemove := len(line) - maxSizeofLine
+		stack := make([]byte, 0, len(line))
 		for i := 0; i < len(line); i++ {
-			shortString := getStringOfSize(line, maxSizeofLine+1) // get a 13 char line
-			biggestNumber := getLargestString(shortString)        // find largest 12 digit number
-			println("Comparing:", battery, biggestNumber)
-			if biggestNumber > battery {
-				battery = biggestNumber
+			currentDigit := line[i]
+			for toRemove > 0 && len(stack) > 0 && stack[len(stack)-1] < currentDigit {
+				stack = stack[:len(stack)-1]
+				toRemove--
 			}
-			// battery = biggestNumber // store largest 12 digit number in library
-			line = shiftRightDropFirst(line)
+			stack = append(stack, currentDigit)
+
+			println("i:", i)
+			println("toRemove:", toRemove)
+			println("stack:", len(stack))
+			println("currentDigit:", currentDigit)
+			println()
 		}
-		println("battery:", battery)
-	}
-}
 
-func getStringOfSize(s string, size int) string {
-	if size > len(s) {
-		return s
-	} else {
-		return s[:size]
-	}
-}
-
-func getLargestString(s string) int {
-	if len(s) != 13 {
-		// handle error however you like; for now, just panic
-		panic("input must be exactly 13 characters long")
-	}
-	maxStr := ""
-	for i := 0; i < len(s); i++ {
-		// remove the character at index i
-		candidate := s[:i] + s[i+1:]
-
-		// first candidate, or larger than current max?
-		if candidate > maxStr {
-			maxStr = candidate
+		if toRemove > 0 {
+			stack = stack[:len(stack)-toRemove]
 		}
+		val, err := strconv.ParseInt(string(stack[:maxSizeofLine]), 10, 64)
+		if err != nil {
+			panic(err)
+		}
+		println(val)
+		total += val
 	}
-	// convert the largest 12-digit string to an int
-	result, err := strconv.Atoi(maxStr)
-	if err != nil {
-		panic(err) // or handle error
-	}
-
-	return result
-}
-
-func removeAtIndex(s string, index int) string {
-	return s[:index] + s[index+1:]
-}
-
-func shiftRightDropFirst(s string) string {
-	if len(s) <= 13 {
-		return s
-	}
-	return s[1:]
+	println(total)
 }
