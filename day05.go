@@ -8,9 +8,17 @@ import (
 
 func day05_1(input string) {
 	lines := strings.Split(input, "\n")
-	freshItems := map[int]struct{}{} // set of ints
-	startOfIng := 0                  // start of Ingredients
+	// freshItems := map[int]struct{}{} // set of ints
+	startOfIng := 0 // start of Ingredients
 	total := 0
+
+	type FreshRange struct {
+		Start int
+		End   int
+	}
+
+	var listOfFreshRanges []FreshRange
+
 	// one := 436639876131680
 	// two := 436867778393908
 	// fmt.Printf("%T", one-two)
@@ -25,23 +33,34 @@ func day05_1(input string) {
 			startNumber, _ := strconv.Atoi(parts[0])
 			endNumber, _ := strconv.Atoi(parts[1])
 
-			if startNumber > endNumber {
-				fmt.Println(startNumber, endNumber)
-			}
+			// create a list of fresh ranges
+			yar := FreshRange{startNumber, endNumber}
+			listOfFreshRanges = append(listOfFreshRanges, yar)
 
-			for startNumber <= endNumber {
-				// fmt.Println(startNumber)
-				freshItems[startNumber] = struct{}{}
-				startNumber++
-			}
+			fmt.Println(yar)
+			// if startNumber > endNumber {
+			// 	fmt.Println(startNumber, endNumber)
+			// }
+
+			// for startNumber <= endNumber {
+			// 	// fmt.Println(startNumber)
+			// 	freshItems[startNumber] = struct{}{}
+			// 	startNumber++
+			// }
 		}
 	}
 	for i := startOfIng; i < len(lines); i++ {
 		number, _ := strconv.Atoi(lines[i])
-		_, exists := freshItems[number]
-		if exists {
-			// fmt.Println(number)
-			total++
+		// _, exists := freshItems[number]
+		// if exists {
+		// 	// fmt.Println(number)
+		// 	total++
+		// }
+		for _, r := range listOfFreshRanges {
+			if number >= r.Start && number <= r.End {
+				total++
+				break
+			}
 		}
 	}
 	fmt.Println("Fresh:", total)
