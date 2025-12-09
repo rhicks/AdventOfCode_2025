@@ -26,6 +26,6 @@ func main() {
 	// day01_2(input)
 	//day03_1(input)
 	// day03_2(input)
-	day04_1(input)
+	day04_2(input)
 
 }

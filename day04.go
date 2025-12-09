@@ -62,8 +62,55 @@ func day04_1(input string) string {
 		}
 	}
 	PrintGrid(grid) // should be full grid now
-	total := calcGrid(grid, totalLines, lineLength)
+	// total := calcGrid(grid, totalLines, lineLength, grid)
+	//println(total)
+	return input
+}
+
+func day04_2(input string) string {
+	fmt.Println("Day 04_2")
+	fmt.Println(input)
+	lines := strings.SplitSeq(strings.TrimSpace(input), "\n")
+	totalLines := 0
+	lineLength := 0
+	for line := range lines {
+		// println(len(line)) output: 10
+		totalLines++
+		lineLength = len(line)
+	}
+	// println(totalLines, lineLength) output: 10 10
+	grid := make([][]int, totalLines)
+	grid2 := make([][]int, totalLines)
+	for i := 0; i < lineLength; i++ {
+		grid[i] = make([]int, lineLength)
+		grid2[i] = make([]int, lineLength)
+	}
+	PrintGrid(grid) // should be empty grid
+	println("---")
+	lines2 := strings.Split(input, "\n")
+	for i, line := range lines2 {
+		for idx, char := range line {
+			if char == 46 {
+				grid[i][idx] = 0
+				grid2[i][idx] = 0
+			} else {
+				grid[i][idx] = 1
+				grid2[i][idx] = 1
+			}
+
+		}
+	}
+	PrintGrid(grid2) // should be full grid now
+	total := calcGrid(grid, totalLines, lineLength, grid2)
+	grandTotal := total
 	println(total)
+	for total > 0 {
+		grid = grid2
+		total = calcGrid(grid, totalLines, lineLength, grid2)
+		grandTotal += total
+	}
+	PrintGrid(grid2)
+	println(grandTotal)
 	return input
 }
 
@@ -140,7 +187,7 @@ func accessible(grid [][]int, r int, c int, maxRows int, maxCols int) bool {
 	}
 }
 
-func calcGrid(grid [][]int, maxRows int, maxCols int) int {
+func calcGrid(grid [][]int, maxRows int, maxCols int, grid2 [][]int) int {
 	total := 0
 	for r, row := range grid {
 		// println(maxCols) // output: 10
@@ -150,6 +197,7 @@ func calcGrid(grid [][]int, maxRows int, maxCols int) int {
 			if isThisTP(grid, r, c) {
 				fmt.Printf("TP AT: grid[%d][%d] = %d\n", r, c, value)
 				if accessible(grid, r, c, maxRows, maxCols) {
+					grid2[r][c] = 0
 					total++
 				}
 			}
