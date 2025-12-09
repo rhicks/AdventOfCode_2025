@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func day04_1(input string) {
+func day04_1(input string) string {
 	//data := []string{
 	//	"..@@.@@@@.\n@@@.@.@.@@\n@@@@@.@.@@\n@.@@@@..@.\n@@.@@@@.@@\n.@@@@@@@.@\n.@.@.@.@@@\n@.@@@.@@@@\n.@@@@@@@@.\n@.@.@@@.@.",
 	//}
@@ -29,29 +29,131 @@ func day04_1(input string) {
 	// @.@.@@@.@.  x.x.@@@.x.
 
 	fmt.Println("Day 04_1")
-	// fmt.Println(input)
+	fmt.Println(input)
 	lines := strings.SplitSeq(strings.TrimSpace(input), "\n")
 	// println(data[0])
 	totalLines := 0
 	lineLength := 0
 	for line := range lines {
-		println(len(line))
+		// println(len(line)) output: 10
 		totalLines++
 		lineLength = len(line)
 	}
-	println(totalLines, lineLength)
+	// println(totalLines, lineLength) output: 10 10
 	// create grid based on line width, and number lines
 	// populate grid
 	// count adjacencies
 	// Create a 10x10 grid of ints
 	grid := make([][]int, totalLines)
-
 	for i := 0; i < lineLength; i++ {
 		grid[i] = make([]int, lineLength)
 	}
-	grid[3][4] = 7
+	PrintGrid(grid) // should be empty grid
+	println("---")
+	lines2 := strings.Split(input, "\n")
+	for i, line := range lines2 {
+		for idx, char := range line {
+			if char == 46 {
+				grid[i][idx] = 0
+			} else {
+				grid[i][idx] = 1
+			}
 
+		}
+	}
+	PrintGrid(grid) // should be full grid now
+	total := calcGrid(grid, totalLines, lineLength)
+	println(total)
+	return input
+}
+
+func PrintGrid(grid [][]int) {
 	for _, row := range grid {
 		fmt.Println(row)
 	}
+}
+
+func isThisTP(grid [][]int, r int, c int) bool {
+	if grid[r][c] == 1 {
+		return true
+	} else {
+		return false
+	}
+}
+
+func accessible(grid [][]int, r int, c int, maxRows int, maxCols int) bool {
+	total := 0
+	topRow := false
+	bottomRow := false
+	firstCol := false
+	lastCol := false
+	if r-1 < 0 {
+		topRow = true
+	}
+	if r+1 > maxRows-1 {
+		bottomRow = true
+	}
+	if c-1 < 0 {
+		firstCol = true
+	}
+	if c+1 > maxCols-1 {
+		lastCol = true
+	}
+	if !topRow && !firstCol && grid[r-1][c-1] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	if !topRow && grid[r-1][c] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	if !topRow && !lastCol && grid[r-1][c+1] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	if !firstCol && grid[r][c-1] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	if !lastCol && grid[r][c+1] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	if !bottomRow && !firstCol && grid[r+1][c-1] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	if !bottomRow && grid[r+1][c] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	if !bottomRow && !lastCol && grid[r+1][c+1] == 1 {
+		fmt.Printf("+1:grid[%d][%d]\n", r, c)
+		total++
+	}
+	println("total from acc:", total)
+	if total > 3 {
+		return false
+	} else {
+		fmt.Printf("ACCESSIBLE:grid[%d][%d]\n", r, c)
+		return true
+	}
+}
+
+func calcGrid(grid [][]int, maxRows int, maxCols int) int {
+	total := 0
+	for r, row := range grid {
+		// println(maxCols) // output: 10
+		// println(maxRows) // output: 10
+		for c, value := range row {
+			// total = 0
+			if isThisTP(grid, r, c) {
+				fmt.Printf("TP AT: grid[%d][%d] = %d\n", r, c, value)
+				if accessible(grid, r, c, maxRows, maxCols) {
+					total++
+				}
+			}
+		}
+	}
+	return total
 }

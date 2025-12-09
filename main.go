@@ -19,13 +19,13 @@ func getInput(day int) string {
 }
 
 func main() {
-	day := 3
+	day := 4
 	input := getInput(day)
 
 	// day01_1(input)
 	// day01_2(input)
 	//day03_1(input)
-	day03_2(input)
-	//day04_1(input)
+	// day03_2(input)
+	day04_1(input)
 
 }
