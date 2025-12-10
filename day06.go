@@ -78,7 +78,167 @@ func day06_1(input string) {
 
 }
 
-// func day06_2(input string) {
-// 	lines := strings.Split(input, "\n")
+func day06_2(input string) {
+	lines := strings.Split(strings.TrimRight(input, "\n"), "\n")
+	if len(lines) == 0 {
+		return
+	}
 
-// }
+	lastLine := lines[len(lines)-1]
+	var widthList []int
+
+	// 1) Find the *end index* of each column by looking at the operator line
+	for i, char := range lastLine {
+		if char != ' ' && i != 0 {
+			widthList = append(widthList, i)
+		}
+	}
+	widthList = append(widthList, len(lastLine))
+
+	type Problem struct {
+		ID        int
+		Numbers   []string
+		Operation string
+		Width     int
+	}
+
+	// 2) Pre-create one Problem per column
+	problems := make([]*Problem, len(widthList))
+	prev := 0
+	for idx, end := range widthList {
+		width := end - prev
+		problems[idx] = &Problem{
+			ID:        idx,
+			Numbers:   []string{},
+			Operation: "",
+			Width:     width,
+		}
+		prev = end
+	}
+
+	// 3) For all lines *except* the last, treat them as numbers
+	for _, line := range lines[:len(lines)-1] {
+		nums := SplitByFieldWidths(line, widthList)
+		for i, field := range nums {
+			problems[i].Numbers = append(problems[i].Numbers, field)
+		}
+	}
+
+	// 4) Last line contains operators
+	opFields := SplitByFieldWidths(lastLine, widthList)
+	for i, field := range opFields {
+		op := ""
+		for _, r := range field {
+			if r != ' ' {
+				op = string(r)
+				break
+			}
+		}
+		problems[i].Operation = op
+	}
+
+	// Helper: for a given Problem, split its Numbers into vertical digit columns.
+	splitProblemIntoColumns := func(p *Problem) [][]int {
+		var cols [][]int
+
+		// If there are no rows or width is zero, nothing to do.
+		if len(p.Numbers) == 0 || p.Width == 0 {
+			return cols
+		}
+
+		// Iterate over each character position in the field width.
+		for col := 0; col < p.Width; col++ {
+			var digits []int
+
+			// Walk down the rows and collect digits at this column position.
+			for _, row := range p.Numbers {
+				if col >= len(row) {
+					continue
+				}
+				ch := row[col]
+				if ch >= '0' && ch <= '9' {
+					digits = append(digits, int(ch-'0'))
+				}
+			}
+
+			// Only keep columns that actually contain digits.
+			if len(digits) > 0 {
+				cols = append(cols, digits)
+			}
+		}
+
+		return cols
+	}
+
+	grandTotal := 0
+
+	// 5) Use the columns to build full numbers and apply the operator
+	for _, r := range problems {
+		fmt.Printf("ID %d (width %d): %q %s\n", r.ID, r.Width, r.Numbers, r.Operation)
+
+		// Get digit-columns for this Problem
+		cols := splitProblemIntoColumns(r)
+
+		// Convert each digit slice into an int: [3 5 6] -> 356
+		var fullNums []int
+		for _, digits := range cols {
+			val := 0
+			for _, d := range digits {
+				val = val*10 + d
+			}
+			fullNums = append(fullNums, val)
+		}
+
+		// Apply the operator across the full numbers
+		total := 0
+		switch r.Operation {
+		case "*":
+			total = 1
+			for _, n := range fullNums {
+				total *= n
+			}
+		case "+":
+			total = 0
+			for _, n := range fullNums {
+				total += n
+			}
+		default:
+			// If an unexpected operator shows up
+			fmt.Printf("  Unknown op %q, skipping\n", r.Operation)
+			continue
+		}
+
+		fmt.Printf("  Columns: %v -> numbers: %v %s => %d\n", cols, fullNums, r.Operation, total)
+		grandTotal += total
+	}
+
+	fmt.Println("Grand total:", grandTotal)
+}
+
+func SplitByFieldWidths(line string, widths []int) []string {
+	runes := []rune(line)
+	var fields []string
+
+	pos := 0
+	for _, w := range widths {
+		if pos >= len(runes) {
+			// No more characters left; append empty field
+			fields = append(fields, "")
+			continue
+		}
+
+		end := w
+		startPos := pos
+
+		// end := pos + w
+		// if end > len(runes) {
+		// 	end = len(runes)
+		// }
+
+		fields = append(fields, string(runes[startPos:end]))
+		pos = end
+		// fmt.Println(w)
+	}
+
+	return fields
+}
