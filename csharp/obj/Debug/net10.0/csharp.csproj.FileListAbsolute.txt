@@ -1,0 +1,15 @@
+/Users/rhicks/Repo/AoC_2025/csharp/bin/Debug/net10.0/csharp
+/Users/rhicks/Repo/AoC_2025/csharp/bin/Debug/net10.0/csharp.deps.json
+/Users/rhicks/Repo/AoC_2025/csharp/bin/Debug/net10.0/csharp.runtimeconfig.json
+/Users/rhicks/Repo/AoC_2025/csharp/bin/Debug/net10.0/csharp.dll
+/Users/rhicks/Repo/AoC_2025/csharp/bin/Debug/net10.0/csharp.pdb
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.AssemblyInfoInputs.cache
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.AssemblyInfo.cs
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.csproj.CoreCompileInputs.cache
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.sourcelink.json
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.dll
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/refint/csharp.dll
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.pdb
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/csharp.genruntimeconfig.cache
+/Users/rhicks/Repo/AoC_2025/csharp/obj/Debug/net10.0/ref/csharp.dll

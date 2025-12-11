@@ -15,7 +15,7 @@ func day07_1(input string) {
 
 	// make an empty grid of the correct size
 	grid := make([][]string, totalLines)
-	for i := range totalLines {
+	for i := range grid {
 		grid[i] = make([]string, lineLength)
 	}
 	// PrintGrid7(grid) // output: empty grid of 16x15
@@ -61,6 +61,7 @@ func day07_1(input string) {
 	}
 
 	// loop over the grid and count splits
+	// part 1 -- good/done
 	for r, row := range grid {
 		for c, value := range row {
 			if value == "^" && grid[r-1][c] == "|" {
@@ -70,7 +71,22 @@ func day07_1(input string) {
 	}
 	PrintGrid7(grid) //print full grid after splitting
 	fmt.Println()
-	fmt.Println("Grand Total:", splitCount)
+	fmt.Println("Grand Total Part 1:", splitCount)
+	fmt.Println()
+
+	// part 2
+	var count int64 = 0
+	for r, row := range grid {
+		for c, value := range row {
+			if value == "^" && grid[r-1][c] == "|" {
+				count++
+			}
+		}
+	}
+	fmt.Println("Grand Total Part 2:", count)
+	// too low: 3076
+	// Day 7 Part 1: 1687
+	// Day 7 Part 2: 390684413472684
 }
 
 func PrintGrid7(grid [][]string) {
